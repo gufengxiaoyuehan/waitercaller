@@ -7,10 +7,12 @@ from flask.ext.login import LoginManager
 from flask.ext.login import login_required
 from flask.ext.login import login_user
 from flask.ext.login import logout_user
+from flask.ext.login import current_user
 
 from mockdbhelper import MockDBHelper as DBHelper
 from passwordhelper import PasswordHelper
 from user import User
+import config
 
 app = Flask(__name__)
 app.secret_key = 'tPXJY3X37Qybz4QykV+hOyUxVQeEXf1Ao2C8upz+fGQXKsM'
@@ -63,13 +65,29 @@ def logout():
 @app.route("/")
 def home():
     return render_template("home.html")
+    
+@app.route("/base")
+def base():
+    return render_template("base.html")
 
-
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+    
 @app.route("/account")
 @login_required
 def account():
-    return "You are logged in"
-
-
+    tables = DB.get_tables(current_user.get_id())
+    return render_template("account.html", tables=tables)
+    
+@app.route("/account/createtable", methods=["POST"])
+@login_required
+def account_createtable():
+    tablename = request.form.get("tablenumber")
+    tableid = DB.add_table(tablename,current_user.get_id())
+    new_url = config.base_url + "newrequest/" + tableid
+    DB.update_table(tableid, new_url)
+    return redirect(url_for("account"))
+    
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
