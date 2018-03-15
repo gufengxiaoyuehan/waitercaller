@@ -30,9 +30,14 @@ class DBHelper:
         self.db.tables.remove({"_id":ObjectId(table_id)})
         
     def add_request(self, table_id, time):
-        table = slef.get_table(table_id)
-        self.db.requests.insert({"owner":table["owner"],"table_number":table["number"]
+        table = self.get_table(table_id)
+        
+        try:
+            self.db.requests.insert({"owner":table["owner"],"table_number":table["number"]
             ,"table_id":table_id,"time":time})
+        except pymongo.errors.DuplicateKeyError:
+            return False
+        return True
             
     def get_requests(self, owner_id):
         return list(self.db.requests.find({"owner":owner_id}))

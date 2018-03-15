@@ -61,9 +61,9 @@ def register():
         salt = PH.get_salt()
         hashed = PH.get_hash(form.password2.data + salt)
         DB.add_user(form.email.data, salt, hashed)
-        return render_template('home.html', registrationform=form,
-            loginform=LoginForm(),onloadmessage="Registration Successful. Please log in.")
-    return render_template("home.html", registrationform=form, loginform=LoginForm())
+        return redirect(url_for('home.html', registrationform=form,
+            loginform=LoginForm(),onloadmessage="Registration Successful. Please log in."))
+    return redirect(url_for("home.html", registrationform=form, loginform=LoginForm()))
 
 
 @app.route("/logout")
@@ -117,8 +117,9 @@ def dashboard_resolve():
     
 @app.route("/newrequest/<tid>")
 def new_request(tid):
-    DB.add_request(tid, current_user.get_id())
-    return "You request has been logged and a waiter will be with you shortly"
-
+    if DB.add_request(tid, datetime.datetime.now()):
+        return "You request has been logged and a waiter will be with you shortly"
+    return "there is already a request pending for this table please be patient"
+    
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
