@@ -1,8 +1,5 @@
 {% extends "base.html" %}
-{% block bodytag %}
-    <body {% if onloadmessage %} onload="alert('{{onloadmessage}}');" {% endif %}>
 
-{% endblock %}
 {% block navbar %}
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
@@ -17,23 +14,13 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" action="/login" method="POST">
-          {% if loginform.errors %}
-          <ul class="errors">
-            {% for field_name,field_errors in loginform.errors|dictsort if field_errors %}
-                {% for error in field_errors %}
-                <li>{{error}}</li>
-                {% endfor %}
-            {% endfor %}
-          </ul>
-          {% endif %}
-          {{ loginform.csrf_token }}
             <div class="form-group">
-              {{ loginform.loginemail(class="form-control",placeholder="Emial Address")}}
+              <input type="text" name="email" placeholder="Email" class="form-control" autofocus>
             </div>
             <div class="form-group">
-              {{ loginform.loginpassword(class="form-control", placeholder="Password")}}
+              <input type="password" name="password" placeholder="Password" class="form-control">
             </div>
-              {{ loginform.submit(value="Sign in",class="btn btn-success") }}
+            <input type="submit" value="Sign in" class="btn btn-success">
           </form>
         </div><!--/.navbar-collapse -->
       </div>
@@ -62,38 +49,25 @@
         <div class="col-md-4">
           <h2>Register now</h2>
              <form class="form-horizontal" action="/register" method="POST">
-             {{ registrationform.csrf_token }}
                 <div class="form-group">
                     <div class="col-sm-9">
-                        {% if registrationform.email.errors %}
-                        <ul class="errors">{% for error in registrationform.email.errors %}<li>{{error}}</li>{% endfor %}
-                        </ul>
-                        {% endif %}
-                        {{ registrationform.email(class="form-control", placeholder="Email Adress") }}
+                        <input type="email" name="email" id="email" placeholder="Email address" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        {% if registrationform.password.errors %}
-                        <ul class="errors">{% for error in registrationform.password.errors %}<li>{{error}}</li>{% endfor %}
-                        </ul>
-                        {% endif %}
-                        {{ registrationform.password(class="form-control", placeholder="Password") }}
+                        <input type="password" name="password" id="password" placeholder="Password" class="form-control">
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-sm-9">
-                        {% if registrationform.password2.errors %}
-                        <ul class="errors">{% for error in registrationform.password2.errors %}<li>{{error}}</li>{% endfor %}
-                        </ul>
-                        {% endif %}
-                        {{ registrationform.password2(class="form-control", placeholder="Confirm Password") }}
+                        <input type="password" name="password2" id="password2" placeholder="Confirm password" class="form-control">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="col-sm-9">
-                        {{ registrationform.submit(class="btn btn-primary btn-bloc") }}
+                        <input type="submit" value="Register" class="btn btn-primary btn-block">
                     </div>
                 </div>
             </form> <!-- /form -->
