@@ -14,8 +14,18 @@
                 <h2>Tables</h2>
                     <h2>Add new table</h2>
                     <form class="form-inline" action="/account/createtable" method="POST">
-                        <input type="text" name="tablenumber" placeholder="table number or name" class="form-control">
-                        <input type="submit" value="create" class="btn btn-primary">
+                    <div class="form-group">
+                    {% if createtableform.tablenumber.errors %}
+                    <ul class="errors">
+                        {% for error in createtableform.tablenumber.errors %}
+                            <li>{{error}}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                    {{createtableform.csrf_token}}
+                    {{createtableform.tablenumber(class="form-control",placeholder="Table number or name")}}
+                    {{createtableform.submit(value="create", class="btn btn-primary")}}
+                    </div>
                     </form>
                     <table class="table table-striped">
                         <tr>
@@ -25,12 +35,14 @@
                         </tr>
                         {% for table in tables %}
                         <form class="form-inline" action="/account/deletetable">
+                        <div>
                             <tr>
                                 <td>{{ table.number }}</td>
                                 <td>{{ table.url }} </td>
                                 <td><input type="submit" value="Delete" class="form-control"></td>
                                 <input type="text" name="tableid" value="{{table._id}}" hidden>
                             </tr> 
+                        <div>
                         </form>
                         {% endfor %}
                     </table>
