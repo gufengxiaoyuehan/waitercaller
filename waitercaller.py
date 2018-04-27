@@ -29,6 +29,11 @@ DB = DBHelper()
 PH = PasswordHelper()
 BH = BitlyHelper()
 
+
+@app.route("/geoloc")
+def geloc():
+    return render_template("showLocation.html")
+
 @login_manager.user_loader
 def load_user(user_id):
     user_password = DB.get_user(user_id)
